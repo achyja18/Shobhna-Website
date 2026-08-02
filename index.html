@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Museum of Almost</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0f1420;
+    --velvet:#1b1030;
+    --velvet-deep:#120a22;
+    --brass:#b5893a;
+    --brass-bright:#d9ab5c;
+    --parchment:#efe6d8;
+    --parchment-dim:#c9bfae;
+    --dust-rose:#c08a83;
+    --line:rgba(213,178,111,0.28);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:
+      radial-gradient(ellipse 120% 80% at 50% -10%, #241536 0%, var(--velvet) 45%, var(--velvet-deep) 100%);
+    color:var(--parchment);
+    font-family:'Cormorant Garamond', serif;
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background-image:
+      radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.25) 0%, transparent 60%),
+      radial-gradient(1px 1px at 70% 60%, rgba(255,255,255,0.18) 0%, transparent 60%),
+      radial-gradient(1px 1px at 40% 80%, rgba(255,255,255,0.15) 0%, transparent 60%),
+      radial-gradient(1px 1px at 85% 15%, rgba(255,255,255,0.2) 0%, transparent 60%);
+    pointer-events:none;
+    opacity:0.6;
+    z-index:0;
+  }
+
+  .eyebrow{
+    font-family:'Space Mono', monospace;
+    font-size:0.68rem;
+    letter-spacing:0.28em;
+    text-transform:uppercase;
+    color:var(--brass-bright);
+  }
+
+  header{
+    position:relative;
+    z-index:1;
+    padding:7rem 6vw 6rem;
+    text-align:center;
+    border-bottom:1px solid var(--line);
+  }
+  header .eyebrow{display:block; margin-bottom:1.6rem;}
+  h1{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-style:italic;
+    font-size:clamp(2.6rem, 7vw, 5.2rem);
+    line-height:1.02;
+    color:var(--parchment);
+    letter-spacing:-0.01em;
+  }
+  h1 .thin{font-weight:500; font-style:normal; color:var(--parchment-dim);}
+  header p.sub{
+    max-width:38rem;
+    margin:1.8rem auto 0;
+    font-size:1.25rem;
+    color:var(--parchment-dim);
+    line-height:1.6;
+  }
+  .rope{
+    width:180px; height:2px;
+    margin:2.8rem auto 0;
+    background:linear-gradient(90deg, transparent, var(--brass), transparent);
+    position:relative;
+  }
+  .rope::before, .rope::after{
+    content:"";
+    position:absolute; top:50%; width:8px; height:8px;
+    border-radius:50%;
+    background:var(--brass-bright);
+    transform:translateY(-50%);
+    box-shadow:0 0 8px rgba(217,171,92,0.7);
+  }
+  .rope::before{left:-4px;}
+  .rope::after{right:-4px;}
+
+  main{position:relative; z-index:1; max-width:1080px; margin:0 auto; padding:5rem 6vw 3rem;}
+
+  .gallery-label{
+    text-align:center;
+    margin-bottom:3.5rem;
+  }
+  .gallery-label h2{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:1.1rem;
+    letter-spacing:0.08em;
+    color:var(--brass-bright);
+    text-transform:uppercase;
+  }
+
+  .exhibits{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));
+    gap:2.2rem;
+  }
+
+  .exhibit{
+    position:relative;
+    background:linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.01));
+    border:1px solid var(--line);
+    border-radius:2px;
+    padding:2.4rem 2rem 2rem;
+    transition:transform 0.35s ease, border-color 0.35s ease, background 0.35s ease;
+  }
+  .exhibit:hover{
+    transform:translateY(-4px);
+    border-color:rgba(213,178,111,0.55);
+    background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.015));
+  }
+  .exhibit .pin{
+    position:absolute; top:-7px; left:2rem;
+    width:14px; height:14px;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, var(--brass-bright), var(--brass) 70%, #7a5620 100%);
+    box-shadow:0 2px 5px rgba(0,0,0,0.4);
+  }
+  .exhibit .num{
+    font-family:'Space Mono', monospace;
+    font-size:0.7rem;
+    letter-spacing:0.15em;
+    color:var(--dust-rose);
+    display:block;
+    margin-bottom:0.9rem;
+  }
+  .exhibit h3{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.55rem;
+    color:var(--parchment);
+    line-height:1.25;
+    margin-bottom:0.9rem;
+  }
+  .exhibit p{
+    color:var(--parchment-dim);
+    font-size:1.08rem;
+    line-height:1.62;
+  }
+  .exhibit .margin{
+    margin-top:1.2rem;
+    padding-top:1rem;
+    border-top:1px dashed var(--line);
+    font-family:'Space Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.04em;
+    color:var(--brass-bright);
+    text-transform:uppercase;
+  }
+
+  .plaque{
+    max-width:640px;
+    margin:5.5rem auto 0;
+    text-align:center;
+    padding:3rem 2rem;
+    border:1px solid var(--line);
+    position:relative;
+  }
+  .plaque::before, .plaque::after{
+    content:"";
+    position:absolute; width:22px; height:22px;
+    border:1px solid var(--brass);
+  }
+  .plaque::before{top:-1px; left:-1px; border-right:none; border-bottom:none;}
+  .plaque::after{bottom:-1px; right:-1px; border-left:none; border-top:none;}
+  .plaque h4{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-weight:500;
+    font-size:1.5rem;
+    color:var(--parchment);
+    margin-bottom:1rem;
+  }
+  .plaque p{color:var(--parchment-dim); font-size:1.1rem; line-height:1.7;}
+  .plaque form{margin-top:1.8rem; display:flex; gap:0.6rem; justify-content:center; flex-wrap:wrap;}
+  .plaque input{
+    background:rgba(255,255,255,0.05);
+    border:1px solid var(--line);
+    color:var(--parchment);
+    padding:0.7rem 1rem;
+    font-family:'Cormorant Garamond', serif;
+    font-size:1rem;
+    min-width:240px;
+    border-radius:1px;
+  }
+  .plaque input::placeholder{color:var(--parchment-dim); opacity:0.6;}
+  .plaque button{
+    background:var(--brass);
+    color:var(--ink);
+    border:none;
+    padding:0.7rem 1.6rem;
+    font-family:'Space Mono', monospace;
+    font-size:0.75rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition:background 0.25s ease;
+  }
+  .plaque button:hover{background:var(--brass-bright);}
+  .thanks{
+    display:none;
+    margin-top:1.2rem;
+    font-family:'Space Mono', monospace;
+    font-size:0.8rem;
+    color:var(--dust-rose);
+  }
+
+  footer{
+    position:relative; z-index:1;
+    text-align:center;
+    padding:5rem 6vw 4rem;
+    color:var(--parchment-dim);
+    font-family:'Space Mono', monospace;
+    font-size:0.7rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .exhibit{transition:none;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="eyebrow">Est. never &mdash; Open always</span>
+  <h1>The Museum <span class="thin">of</span> Almost</h1>
+  <p class="sub">A small permanent collection of things that came very close &mdash; near-wins, second thoughts, and the fine print of fate. Nothing here quite happened. Look closely anyway.</p>
+  <div class="rope"></div>
+</header>
+
+<main>
+  <div class="gallery-label">
+    <h2>Gallery One &mdash; Permanent Collection</h2>
+  </div>
+
+  <div class="exhibits">
+
+    <div class="exhibit">
+      <span class="pin"></span>
+      <span class="num">EXHIBIT 01</span>
+      <h3>The Silver Medal, Framed as Gold</h3>
+      <p>Displayed here: the exact expression of an athlete in the 0.04 seconds after realizing they placed second. Curators have not yet identified a single one who looks purely happy.</p>
+      <div class="margin">Condition: still stings, faintly</div>
+    </div>
+
+    <div class="exhibit">
+      <span class="pin"></span>
+      <span class="num">EXHIBIT 02</span>
+      <h3>The Reply That Was Typed and Deleted</h3>
+      <p>A full paragraph, composed with feeling, backspaced one letter at a time at 11:47pm. What it said is lost. That it was almost sent is not.</p>
+      <div class="margin">Provenance: anonymous donor</div>
+    </div>
+
+    <div class="exhibit">
+      <span class="pin"></span>
+      <span class="num">EXHIBIT 03</span>
+      <h3>The Job Offer, One Candidate Away</h3>
+      <p>A folder of interview notes for the person who came second. Somewhere, in a parallel filing cabinet, their whole different decade begins.</p>
+      <div class="margin">On loan from Human Resources</div>
+    </div>
+
+    <div class="exhibit">
+      <span class="pin"></span>
+      <span class="num">EXHIBIT 04</span>
+      <h3>The Bus That Was Missed by Nine Seconds</h3>
+      <p>Preserved under glass: the precise nine seconds. Ask any visitor and they will tell you their own version, usually with more detail than the actual bus deserved.</p>
+      <div class="margin">Weight: negligible. Effect: lifelong</div>
+    </div>
+
+    <div class="exhibit">
+      <span class="pin"></span>
+      <span class="num">EXHIBIT 05</span>
+      <h3>The Question Raised in the Meeting, Then Not</h3>
+      <p>A hand, halfway up. The room moved on. This exhibit is sponsored by every good idea that waited for a better moment that never arrived.</p>
+      <div class="margin">Est. frequency: daily, worldwide</div>
+    </div>
+
+    <div class="exhibit">
+      <span class="pin"></span>
+      <span class="num">EXHIBIT 06</span>
+      <h3>The Recipe Nobody Wrote Down</h3>
+      <p>A grandmother's dish, almost captured on paper twice. What survives instead: a smell that returns without warning, and a taste no one can quite reconstruct.</p>
+      <div class="margin">Restoration: not possible</div>
+    </div>
+
+  </div>
+
+  <div class="plaque">
+    <h4>Leave your own almost</h4>
+    <p>The curators accept donations. Nothing is stored, nothing is sent anywhere &mdash; it simply gets to exist here, once, before the page forgets it.</p>
+    <form id="almostForm">
+      <input type="text" id="almostInput" placeholder="I almost&hellip;" maxlength="120" required />
+      <button type="submit">Hang it up</button>
+    </form>
+    <div class="thanks" id="thanksMsg">Hung, crookedly, just for a moment. &mdash; Thank you.</div>
+  </div>
+</main>
+
+<footer>
+  No refunds &middot; No regrets, mostly &middot; Mind the velvet rope
+</footer>
+
+<script>
+  const form = document.getElementById('almostForm');
+  const input = document.getElementById('almostInput');
+  const thanks = document.getElementById('thanksMsg');
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    if(!input.value.trim()) return;
+    thanks.style.display = 'block';
+    input.value = '';
+    setTimeout(()=>{ thanks.style.display = 'none'; }, 3200);
+  });
+</script>
+
+</body>
+</html>
